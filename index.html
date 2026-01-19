@@ -53,22 +53,16 @@
         let time = 0;
         let musicStarted = false;
 
-        // --- SISTEMA DE FRASES SIN REPETICIÓN ---
         const originalPhrases = [
-            "Eres mi pensamiento favorito", 
-            "Te amo infinito",
-            "Contigo el mundo es perfecto", 
-            "Cada pétalo es un beso",
-            "Para mi Andrea hermosa", 
-            "Hecha pa' mi...",
-            "Tú eres mi magia", 
-            "17 de enero ❤️"
+            "Eres mi pensamiento favorito", "Te amo infinito",
+            "Contigo el mundo es perfecto", "Cada pétalo es un beso",
+            "Para mi Andrea hermosa", "Hecha pa' mi...",
+            "Tú eres mi magia", "17 de enero ❤️"
         ];
         let availablePhrases = [];
 
         function getNextPhrase() {
             if (availablePhrases.length === 0) {
-                // Si se acaban, clonamos y barajamos de nuevo
                 availablePhrases = [...originalPhrases].sort(() => Math.random() - 0.5);
             }
             return availablePhrases.pop();
@@ -116,7 +110,7 @@
             constructor(x, y) {
                 this.x = x; this.y = y;
                 this.growth = 0; this.opacity = 0;
-                this.phrase = getNextPhrase(); // Usa la función de frases sin repetición
+                this.phrase = getNextPhrase();
                 this.offset = Math.random() * 10;
             }
             draw() {
@@ -171,9 +165,19 @@
             }
 
             if (clientX !== undefined && clientY !== undefined) {
-                flowers.push(new Flower(clientX, clientY - 50));
-                // Aumentamos un poco el límite de flores para disfrutar más frases
-                if(flowers.length > 15) flowers.shift();
+                // --- VERIFICACIÓN DE SOBREPOSICIÓN ---
+                // Si el nuevo toque está a menos de 80px de otra flor, no la crea
+                const tooClose = flowers.some(f => {
+                    const dx = f.x - clientX;
+                    const dy = f.y - clientY;
+                    return Math.sqrt(dx*dx + dy*dy) < 80; 
+                });
+
+                if (!tooClose) {
+                    flowers.push(new Flower(clientX, clientY - 50));
+                    // LÍMITE DE 5 FLORES
+                    if(flowers.length > 5) flowers.shift();
+                }
             }
         }
 
