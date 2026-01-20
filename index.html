@@ -30,12 +30,12 @@
         @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
-<body>
+<body onclick="PlayAudio()"> 
 
     <div id="dedicatoria">Feliz 17 de enero mi amorcito Andrea ❤️</div>
     <div id="instrucciones">Sube el volumen y toca la pantalla... 🎵</div>
     
-    <audio autoplay controls loop>
+    <audio id="musica" loop preload="auto">
         <source src="Hecha_pa_mi-Boza.mp3" type="audio/mpeg">
     </audio>
 
@@ -147,6 +147,10 @@
             }
         }
 
+        function PlayAudio() {
+                audio.play();
+            }
+            
         function handleInteraction(e) {
             if (!musicStarted) {
                 audio.play().catch(() => {});
@@ -208,8 +212,9 @@
         init();
         animate();
     </script>
-</body>
+</body> 
 </html>
+
 
 
 
